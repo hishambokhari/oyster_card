@@ -9,5 +9,9 @@ LIMIT = 90
         raise "limit of #{LIMIT} exceeded!" if @balance + amount > LIMIT
        @balance += amount 
     end
+
+    def deduct(amount)
+        @balance -= amount
+    end
 end
 
