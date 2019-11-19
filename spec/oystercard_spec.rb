@@ -26,13 +26,6 @@ describe OysterCard do
 
     end    
 
-    describe "#deduct" do
-        it "deducts 20 from the balance" do
-            subject.top_up(30)
-            expect{ subject.deduct(20) }.to change { subject.balance }.by -20
-        end
-    end
-
     describe "#in_journey" do
         
         it "should return true if touched in" do
@@ -53,7 +46,11 @@ describe OysterCard do
             expect{ subject.touch_in }.to raise_error(message)
         end
     end
-
+    describe "#touch_out" do
+        it "deduct the minimum ticket price from the balance" do
+            expect{ subject.touch_out }.to change{ subject.balance}.by -MIN_TICKET_VALUE  
+        end
+    end
 
 
 end
