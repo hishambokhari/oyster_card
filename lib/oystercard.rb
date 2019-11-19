@@ -1,11 +1,15 @@
+require "./lib/station.rb"
+
 class OysterCard
-    attr_reader :balance
+    attr_reader :balance, :entry_station
+
     LIMIT = 90
     MIN_TICKET_VALUE = 1
-    def initialize
-      @balance =  0
-      @in_journey = false
-    
+
+    def initialize(station_class = Station)
+        @balance =  0
+        @station = station_class.new
+        @entry_station 
     end
 
     def top_up(amount)
@@ -13,18 +17,18 @@ class OysterCard
        @balance += amount 
     end
 
-    def touch_in
+    def touch_in(station)
         raise "Insufficient funds!" if @balance < MIN_TICKET_VALUE
-        @in_journey = true
+        @entry_station = station
     end
 
     def touch_out
         deduct(MIN_TICKET_VALUE)
-        @in_journey = false
+        @entry_station = nil
     end
 
     def in_journey?
-        @in_journey
+        @entry_station != nil
     end
 
 

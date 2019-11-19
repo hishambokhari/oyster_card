@@ -30,7 +30,7 @@ describe OysterCard do
         
         it "should return true if touched in" do
             subject.top_up(MIN_TICKET_VALUE)
-            subject.touch_in
+            subject.touch_in(station)
             expect( subject.in_journey?).to eq(true)
         end
 
@@ -40,15 +40,30 @@ describe OysterCard do
         end 
     end
 
+    let(:station)  {double :station}
+
     describe "#touch_in" do
         it "raises an error if balance less than minimum ticket price" do
             message = "Insufficient funds!"
-            expect{ subject.touch_in }.to raise_error(message)
+            expect{ subject.touch_in(station) }.to raise_error(message)
+        end
+
+        it "remembers the station" do
+            subject.top_up(MIN_TICKET_VALUE)
+            subject.touch_in(station)
+            expect(subject.entry_station).to eq station
         end
     end
     describe "#touch_out" do
         it "deduct the minimum ticket price from the balance" do
             expect{ subject.touch_out }.to change{ subject.balance}.by -MIN_TICKET_VALUE  
+        end
+
+        it "changes entry_station to nil once touched out" do
+            subject.top_up(MIN_TICKET_VALUE)
+            subject.touch_in(station)
+            subject.touch_out
+            expect(subject.entry_station).to eq nil
         end
     end
 
