@@ -30,5 +30,20 @@ describe OysterCard do
         end
     end
 
+    describe "#in_journey" do
+        
+        it "should return true if touched in" do
+            subject.touch_in
+            expect( subject.in_journey?).to eq(true)
+        end
+
+        it "should return false if touched out" do
+            subject.touch_out
+            expect( subject.in_journey?).to eq(false)  
+        end 
+    end
+
 end
+
+
 
