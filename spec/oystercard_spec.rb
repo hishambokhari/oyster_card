@@ -3,6 +3,9 @@ require 'oystercard'
 
 describe OysterCard do
 
+    LIMIT = OysterCard::LIMIT  
+    MIN_TICKET_VALUE = OysterCard::MIN_TICKET_VALUE
+
     it '#balance ' do
         expect(subject.balance).to eql(0)
     end
@@ -15,7 +18,7 @@ describe OysterCard do
             expect{ subject.top_up(1) }.to change { subject.balance }.by 1
         end
         it "should raise an error when the max limit is exceeded" do
-          LIMIT = OysterCard::LIMIT  
+          
           expect{ subject.top_up(95)}.to raise_error("limit of #{LIMIT} exceeded!")
 
         end
@@ -33,6 +36,7 @@ describe OysterCard do
     describe "#in_journey" do
         
         it "should return true if touched in" do
+            subject.top_up(MIN_TICKET_VALUE)
             subject.touch_in
             expect( subject.in_journey?).to eq(true)
         end
@@ -42,6 +46,15 @@ describe OysterCard do
             expect( subject.in_journey?).to eq(false)  
         end 
     end
+
+    describe "#touch_in" do
+        it "raises an error if balance less than minimum ticket price" do
+            message = "Insufficient funds!"
+            expect{ subject.touch_in }.to raise_error(message)
+        end
+    end
+
+
 
 end
 
